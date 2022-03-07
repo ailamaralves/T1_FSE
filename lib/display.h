@@ -21,7 +21,6 @@
 void connect_display(void);
 void print_display(float tempI, float tempR, float tempE);
 void display_byte(int bits, int mode);
-void display_toggle_enable(int bits);
 
 // added by Lewis
 void typeFloat(float myFloat);

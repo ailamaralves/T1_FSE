@@ -29,9 +29,10 @@ int connect_uart() {
   return filestream;
 }
 
+//160022673
 void write_uart_get(int filestream, unsigned char code) {
-  unsigned char package[7] = {0x01, 0x23, code, 0x09,
-                              0x09, 0x08, 0x01};
+  unsigned char package[7] = {0x01, 0x23, code, 0x02,
+                              0x06, 0x07, 0x03};
   short crc = calcula_CRC(package, 7);
   unsigned char msg[9];
   memcpy(msg, &package, 7);
@@ -44,7 +45,7 @@ void write_uart_get(int filestream, unsigned char code) {
 }
 
 void write_uart_send(int filestream, int control_signal) {
-  unsigned char package[7] = {0x01, 0x16, SEND_SIGNAL, 0x00, 0x06, 0x07, 0x03};
+  unsigned char package[7] = {0x01, 0x16, SEND_SIGNAL, 0x02, 0x06, 0x07, 0x03};
   unsigned char msg[13];
   memcpy(msg, &package, 7);
   memcpy(&msg[7], &control_signal, 4);

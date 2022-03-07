@@ -2,21 +2,26 @@
 
 int fd;
 
-void print_display(float TI,float TR, float TE)   {
+void print_display(float ti,float tr, float te)   {
 
   if (wiringPiSetup () == -1) exit (1);
-
   fd = wiringPiI2CSetup(I2C_ADDR);
 
-  connect_display(); // setup LCD
+  connect_display();
   displayLoc(LINE1);
   typeln("TI");
-  typeFloat(TI);
+  typeFloat(ti);
   typeln(" TR");
-  typeFloat(TR);
+  typeFloat(tr);
   displayLoc(LINE2);
   typeln("TE");
-  typeFloat(TE);
+  typeFloat(te);
+}
+
+// clr lcd go home loc 0x80
+void ClrDisplay(void)   {
+  display_byte(0x01, LCD_CMD);
+  display_byte(0x02, LCD_CMD);
 }
 
 // float to string
@@ -26,28 +31,17 @@ void typeFloat(float myFloat)   {
   typeln(buffer);
 }
 
-
-// clr lcd go home loc 0x80
-void ClrDisplay(void)   {
-  display_byte(0x01, LCD_CMD);
-  display_byte(0x02, LCD_CMD);
-}
-
 // go to location on LCD
 void displayLoc(int line)   {
   display_byte(line, LCD_CMD);
 }
 
-// this allows use of any size string
+// allows use of any size string
 void typeln(const char *s)   {
-
   while ( *s ) display_byte(*(s++), LCD_CHR);
-
 }
 
 void display_byte(int bits, int mode)   {
-
-  //Send byte to data pins
   // bits = the data
   // mode = 1 for data, 0 for command
   int bits_high;
@@ -74,9 +68,7 @@ void display_toggle_enable(int bits)   {
   delayMicroseconds(500);
 }
 
-
 void connect_display()   {
-  // Initialise display
   display_byte(0x33, LCD_CMD); // Initialise
   display_byte(0x32, LCD_CMD); // Initialise
   display_byte(0x06, LCD_CMD); // Cursor move direction
