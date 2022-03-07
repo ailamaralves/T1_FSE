@@ -119,7 +119,7 @@ void init() {
 
 void menu() {
   int option, key;
-  printf("Como deseja controlar o programa?\n\t1) Terminal\n\t2) Chave\n");
+  printf("Deseja controlar o programapor:\n\t1) Terminal\n\t2) Chave\n");
   scanf("%d", &option);
   switch (option) {
     case 1:
