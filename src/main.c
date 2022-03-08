@@ -30,10 +30,9 @@ void shutdown_program() {
 
 
 void pid_routine(int key) {
-  system("clear");
+  //system("clear");
   float TI, TR, TE;
   int value_to_send = 0;
-  printf("\n================== Iniciada rotina PID ==================\n");
   pid_setup(20, 0.1, 100);
   do {
     write_uart_get(uart_filesystem, GET_INTERNAL_TEMP);
@@ -49,7 +48,7 @@ void pid_routine(int key) {
     TE = get_current_temperature(&bme_connection);
 
     printf("\tTI: %.2f⁰C - TR: %.2f⁰C - TE: %.2f⁰C\n", TI, TR, TE);
-    print_display("UART ", TI, TR, TE);
+    print_display(TI, TR, TE);
 
   if (!use_terminal) {
       write_uart_get(uart_filesystem, GET_KEY_VALUE);
@@ -58,35 +57,36 @@ void pid_routine(int key) {
 
     write_uart_send(uart_filesystem, value_to_send);
   } while (key_gpio == key);
+  pid_routine(key);
 }
 
 
 void terminal_routine(float TR, int key) {
-  system("clear");
+  //system("clear");
   float TI, TE;
   int value_to_send = 0;
-  printf("\n================== Iniciada rotina Terminal ==================\n");
   pid_setup(20, 0.1, 100);
   do {
     write_uart_get(uart_filesystem, GET_INTERNAL_TEMP);
     TI = read_uart(uart_filesystem, GET_INTERNAL_TEMP).float_value;
 
-    double value_to_send = pid_controle(TI);
+    double value_to_send = pid_control(TI);
     pwm_control(value_to_send);
 
     pid_reference(TR);
 
     TE = get_current_temperature(&bme_connection);
     printf("\tTERMINAL TI: %.2f⁰C - TR: %.2f⁰C - TE: %.2f⁰C\n", TI, TR, TE);
-    print_display("Terminal ", TI, TR, TE);
+    print_display(TI, TR, TE);
 
     if (!use_terminal) {
       write_uart_get(uart_filesystem, GET_KEY_VALUE);
       key_gpio = read_uart(uart_filesystem, GET_KEY_VALUE).int_value;
     }
 
-    write_uart_send_REF(uart_filesystem, TR);
+    write_uart_send(uart_filesystem, TR);
   } while (key_gpio == key);
+  terminal_routine(TR, key);
 }
 
 
@@ -110,10 +110,12 @@ void menu() {
       system("clear");
       printf("Insira o valor da Temperatura Referêncial(TR): \n");
       scanf("%f", &tr);
+      printf("\n================== Iniciada rotina Terminal ==================\n");
       terminal_routine(0, tr);
       break;
     case 2:
       use_terminal = true;
+      printf("\n================== Iniciada rotina PID ==================\n");
       pid_routine(0);
       break;
     case 3:
@@ -123,11 +125,15 @@ void menu() {
       printf("Opção invalida\n");
       menu();
       break;
+  }
 }
 
 int main() {
   init();
   signal(SIGINT, shutdown_program);
+  printf(
+      "Trabalho 1\n"
+      "Ailamar Alves Guimaraes - 160022673\n");
   menu();
   return 0;
 }

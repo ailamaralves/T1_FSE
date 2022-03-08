@@ -6,4 +6,3 @@ void pid_reference(float reference_);
 double pid_control(double saida_medida);
 
 #endif /* PID_H_ */
-

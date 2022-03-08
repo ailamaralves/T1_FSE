@@ -1,13 +1,13 @@
-#include <stdio.h>
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "bme280.h"
+#include  "bme280.h"
 
 int8_t user_i2c_read(uint8_t id, uint8_t reg_addr, uint8_t *data, uint16_t len) {
   write(i2c_filestream, &reg_addr, 1);
