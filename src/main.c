@@ -57,7 +57,6 @@ void pid_routine(int key) {
 
     write_uart_send(uart_filesystem, value_to_send);
   } while (key_gpio == key);
-  pid_routine(key);
 }
 
 
@@ -86,7 +85,6 @@ void terminal_routine(float TR, int key) {
 
     write_uart_send(uart_filesystem, TR);
   } while (key_gpio == key);
-  terminal_routine(TR, key);
 }
 
 
