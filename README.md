@@ -27,6 +27,6 @@ $ Ctrl + c
 
 ## Programa
 
-A execução do programa pode ser feito de dois modos: 
+A execução do programa pode ser feita de dois modos: 
 - Pelo terminal escolhendo a temperatura referencial;
 - Através de um Potenciômetro externo.
